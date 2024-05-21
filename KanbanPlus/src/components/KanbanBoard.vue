@@ -36,7 +36,26 @@ onMounted(async () => {
       doctype: 'Kanban Board',
       name: 'Teacher Status',
     },
+  }).then(response => {
+  const board = response.message;
+
+  let assign_to = new frappe.ui.form.AssignToDialog({
+    obj: board,
+    method: "frappe.desk.form.assign_to.add",
+    doctype: "Kanban Board",
+    docname: board.name,
+    callback: function () {
+      const users = assign_to_dialog.get_values().assign_to;
+      board.assigned_list = [...new Set(board.assigned_list.concat(users))];
+      store.dispatch("update_card", board);
+    },
   });
+
+  let assign_to_dialog = assign_to.dialog;
+  assign_to_dialog.show();
+}).catch(error => {
+  console.error('Failed to get the Kanban board:', error);
+});
 
   const ref_doctype = board.message.reference_doctype;  
   const columnsData = board.message.columns;
