@@ -1,6 +1,6 @@
 ## Kanban Plus
 
-Better and faster Kanban.
+Better and faster Kanban in Frappe.
 
 #### License
 
