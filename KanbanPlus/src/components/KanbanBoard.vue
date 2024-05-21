@@ -1,5 +1,5 @@
-<template>  
-   <div class="kanban-board">
+<template>
+  <div class="kanban-board">
     <div
       class="kanban-column"
       v-for="(column, columnIndex) in columns"
@@ -22,46 +22,58 @@
       </div>
     </div>
   </div>
-  </template>
+</template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const columns = ref([]);
 
 onMounted(async () => {
   const board = await frappe.call({
-    method: 'frappe.client.get_document',
+    method: 'frappe.client.get',
     args: {
       doctype: 'Kanban Board',
       name: 'Teacher Status',
     },
   });
 
+  const ref_doctype = board.message.reference_doctype;  
   const columnsData = board.message.columns;
+  const field_name = board.message.field_name;
 
   columnsData.forEach((column) => {
-    const cards = await frappe.call({
-      method: 'frappe.client.get_list',
-      args: {
-        doctype: column.reference_doctype,
-        filters: {
-          [column.field_name]: column.status,
-        },
-      },
-    });
-
     columns.value.push({
       id: column.name,
       title: column.column_name,
-      cards: cards.message.map((card) => ({
-        id: card.name,
-        title: card[frappe.meta.get_docfield(column.reference_doctype, 'title').label],
-      })),
+      cards: [], // Initially, the cards are empty and will be populated in the next step
     });
   });
-});
+  
+  console.log(JSON.stringify(field_name ));
+  console.log(JSON.stringify(ref_doctype)); 
+  console.log(JSON.stringify(columnsData)); 
+  // for (const column of columnsData) {
+  //   const cards = await frappe.call({
+  //     method: 'frappe.client.get_list',
+  //     args: {
+  //       doctype: column.reference_doctype,
+  //       filters: {
+  //         [column.field_name]: column.status,
+  //       },
+  //     },
+  //   });
 
+  //   columns.value.push({
+  //     id: column.name,
+  //     title: column.column_name,
+  //     cards: cards.message.map((card) => ({
+  //       id: card.name,
+  //       title: card[frappe.meta.get_docfield(column.reference_doctype, 'title').label],
+  //     })),
+  //   });
+  // }
+});
 
 
 let draggedCard = null;
@@ -76,7 +88,6 @@ function dragStart(card, columnIndex, cardIndex) {
   draggedFromIndex = cardIndex;
   targetColumn = null;
   targetIndex = null;
-  console.log(frappe.call);
 }
 
 function dragEnter(columnIndex, cardIndex) {
@@ -121,7 +132,3 @@ function isDragging(card, columnIndex, cardIndex) {
   );
 }
 </script>
-
-<style>
-
-</style>
