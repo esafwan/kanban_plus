@@ -10,8 +10,11 @@ app_license = "mit"
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/kanban_plus/css/kanban_plus.css"
+app_include_css = "/assets/kanban_plus/css/kanbanplus.css"
 # app_include_js = "/assets/kanban_plus/js/kanban_plus.js"
+app_include_js = ["/assets/kanban_plus/js/list_view_select.bundle.js", 
+                  "/assets/kanban_plus/js/base_list.bundle.js"]
+
 
 # include js, css files in header of web template
 # web_include_css = "/assets/kanban_plus/css/kanban_plus.css"
@@ -26,6 +29,9 @@ app_license = "mit"
 
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
+page_js = { "kanbanplus" :  ["public/js/vue.3.4.27.js", "public/js/kanbanplus_.js" ]}
+# page_js = {"List View": "public/js/custom_list_view_select.js" }
+
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}

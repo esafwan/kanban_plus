@@ -1,0 +1,11 @@
+{
+  "name": "kanban_plus",
+  "version": "1.0.0",
+  "main": "index.js",
+  "  scripts": {
+    "build": "cd KanbanPlus && npm install && yarn build"
+  },
+  "author": "esafwan <esafwan@gmail.com>",
+  "license": "MIT"
+
+}

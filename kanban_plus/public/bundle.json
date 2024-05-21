@@ -1,0 +1,8 @@
+{
+    "kanban_plus/js/list_view_select.js": [
+      "public/js/list_view_select.bundle.js"
+    ],
+    "kanban_plus/js/base_list.js" : [
+      "public/js/base_list.bundle.js"
+    ]
+  }
