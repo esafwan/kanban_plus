@@ -49,31 +49,35 @@ onMounted(async () => {
       cards: [], // Initially, the cards are empty and will be populated in the next step
     });
   });
-  
-  console.log(JSON.stringify(field_name ));
-  console.log(JSON.stringify(ref_doctype)); 
-  console.log(JSON.stringify(columnsData)); 
-  // for (const column of columnsData) {
-  //   const cards = await frappe.call({
-  //     method: 'frappe.client.get_list',
-  //     args: {
-  //       doctype: column.reference_doctype,
-  //       filters: {
-  //         [column.field_name]: column.status,
-  //       },
-  //     },
-  //   });
 
-  //   columns.value.push({
-  //     id: column.name,
-  //     title: column.column_name,
-  //     cards: cards.message.map((card) => ({
-  //       id: card.name,
-  //       title: card[frappe.meta.get_docfield(column.reference_doctype, 'title').label],
-  //     })),
-  //   });
-  // }
+  for (const column of columnsData) {
+    const cards = await frappe.call({
+      method: 'frappe.client.get_list',
+      args: {
+        doctype: ref_doctype,
+        filters: {
+          [field_name]: column.column_name,
+        },
+      },
+    });
+
+    console.log(`Cards for column ${column.column_name}:`, cards.message);
+
+    const columnIndex = columns.value.findIndex(col => col.id === column.name);
+    if (columnIndex !== -1) {
+      columns.value[columnIndex].cards = cards.message.map((card) => {
+        console.log(`Fields available in card ${card.name}:`, card);
+        return {
+          id: card.name,
+          title: card.name, // Change this to the correct field name
+        };
+      });
+    }
+  }
 });
+
+
+
 
 
 let draggedCard = null;
